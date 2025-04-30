@@ -12,11 +12,11 @@ def create_demo_file(file_path):
             file.write(f"Sample text\n")
 
 
-# High level read using Python's built-in open and read functions
+# High level read using Python's built-in open and read functions (unbuffered)
 def high_level_file_read(file_path):
     start_time = time.time()
-    with open(file_path, "r") as file: # Open the file in read mode
-        content = file.read() # Read the entire file
+    with open(file_path, "rb", buffering=0) as file:  # Open to read in binary mode, unbuffered 
+        content = file.read()  # Read the entire file
     end_time = time.time()
     return end_time - start_time
 
@@ -30,13 +30,12 @@ def low_level_file_read(file_path):
     end_time = time.time()
     return end_time - start_time
 
-
-# High level write using Python's built-in open and write functions
+# High level write using Python's built-in open and write functions (unbuffered)
 def high_level_file_write(write_file_path):
-    start_time = time.time() 
-    with open(write_file_path, "w") as file: 
-        for i in range(10000):  # Writing data to file
-            file.write(f"Sample text\n")
+    start_time = time.time()
+    with open(write_file_path, "wb", buffering=0) as file:  # Unbuffered binary mode
+        for i in range(10000):  # Write 10,000 lines of data
+            file.write(f"Sample text\n".encode('utf-8')) # Write sample text encoded into bytes
     end_time = time.time()
     return end_time - start_time
 
@@ -74,7 +73,7 @@ def main():
 
     # Plot the results
     plt.figure(figsize=(10, 6))
-    plt.barh(methods, times, color=['lightgreen', 'lightred', 'lightgreen', 'lightred'])
+    plt.barh(methods, times, color=['green', 'red', 'green', 'red'])
     plt.title('High-level vs Lower-level File Read/Write Performance')
     plt.xlabel('Time (seconds)')
     plt.tight_layout()
